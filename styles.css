@@ -1,0 +1,131 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  /* same color as wordle site */
+  background-color: hsl(240, 3%, 7%);
+  /* helps middle section use max room from header / keyboard  */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1em;
+  font-size: clamp(0.5rem, 2.5vmin, 1.5rem);
+}
+
+.keyboard {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(auto, 1.25em));
+  grid-auto-rows: 3em;
+  gap: 0.25em;
+  justify-content: center;
+}
+
+.key {
+  font-size: inherit;
+  grid-column: span 2;
+  border: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: hsl(
+    var(--hue, 200),
+    var(--saturation, 1%),
+    calc(var(--lightness-offset, 0%) + var(--lightness, 51%))
+  );
+  color: white;
+  fill: white;
+  text-transform: uppercase;
+  border-radius: 0.25em;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* enter / backspace key sizing */
+.key.large {
+  grid-column: span 3;
+}
+
+/* gives me the svg correct size */
+.key > svg {
+  width: 1.75em;
+  height: 1.75em;
+}
+
+/* makes keys abit lighter when hovered / focused over */
+.key:hover,
+.key:focus {
+  --lightness-offset: 10%;
+}
+
+/* gives keyboard key the darker shade for a wrong selection */
+.key.wrong {
+  --lightness: 23%;
+}
+
+/* gives keyboard key the dark yellow tint for right key but wrong location */
+.key.wrong-location {
+  --hue: 49;
+  --saturation: 51%;
+  --lightness: 47%;
+}
+
+/* gives keyboard key the green tint for the correct key */
+.key.correct {
+  --hue: 115;
+  --saturation: 29%;
+  --lightness: 43%;
+}
+
+/* styling for the game board */
+.guess-grid {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  flex-grow: 1;
+  grid-template-columns: repeat(5, 4em);
+  grid-template-rows: repeat(6, 4em);
+  gap: 0.25em;
+  margin-bottom: 1em;
+}
+
+/* styling for each tile in the game board */
+.tile {
+  font-size: 2em;
+  color: white;
+  border: 0.05em solid hsl(240, 2%, 23%);
+  text-transform: uppercase;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+/* game board tile that is currently typed in */
+.tile[data-state="active"] {
+  border-color: hsl(200, 1%, 34%);
+}
+
+/* game board tile that is wrong guess */
+.tile[data-state="wrong"] {
+  border: none;
+  background-color: hsl(240, 2%, 23%);
+}
+
+/* game board tile right letter, wrong location */
+.tile[data-state="wrong-location"] {
+  border: none;
+  background-color: hsl(49, 51%, 47%);
+}
+
+/* game board tile that is the correct letter and location */
+.tile[data-state="correct"] {
+  border: none;
+  background-color: hsl(115, 29%, 43%);
+}

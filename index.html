@@ -5,16 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="script.js" defer></script>
     <title>Wordle Clone</title>
   </head>
   <body>
+    <!-- Alert container -->
+    <div class="alert-container" data-alert-container>
+      <div class="alert">test</div>
+    </div>
     <!-- guess tiles -->
-    <div class="guess-grid">
-      <div class="tile" data-state="active">T</div>
-      <div class="tile" data-state="wrong">H</div>
-      <div class="tile" data-state="wrong-location">O</div>
-      <div class="tile" data-state="correct">S</div>
-      <div class="tile">E</div>
+    <div data-guess-grid class="guess-grid">
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
+      <div class="tile"></div>
       <div class="tile"></div>
       <div class="tile"></div>
       <div class="tile"></div>
@@ -44,9 +48,9 @@
     </div>
     <!-- keyboard for the game -->
     <div class="keyboard">
-      <button class="key wrong" data-key="Q">Q</button>
-      <button class="key wrong-location" data-key="W">W</button>
-      <button class="key correct" data-key="E">E</button>
+      <button class="key" data-key="Q">Q</button>
+      <button class="key" data-key="W">W</button>
+      <button class="key" data-key="E">E</button>
       <button class="key" data-key="R">R</button>
       <button class="key" data-key="T">T</button>
       <button class="key" data-key="Y">Y</button>

@@ -15292,6 +15292,9 @@ const dictionary = [
   "shave",
 ];
 
+// const for alert container where itll display the alert
+const alertContainer = document.querySelector("[data-alert-container]");
+
 // const for our game board to select the tile
 const guessGrid = document.querySelector("[data-guess-grid]");
 
@@ -15374,6 +15377,7 @@ function deleteKey() {
   delete lastTile.dataset.letter;
 }
 
+// function that is called when user submits a guess,the if checks the user guess for length of submitted word
 function submitGuess() {
   const activeTiles = [...getActiveTiles()];
   if (activeTiles.length !== WORD_LENGTH) {
@@ -15381,9 +15385,50 @@ function submitGuess() {
     shakeTiles(activeTiles);
     return;
   }
+
+  const guess = activeTiles.reduce((word, tile) => {
+    return word + tile.dataset.letter;
+  }, "");
 }
 
 //function that selects the tiles that have letter inside of them
 function getActiveTiles() {
   return guessGrid.querySelectorAll('[data-state="active"]');
+}
+
+// function that shows the alert message defined above "not enough letters", the default duration we set to 1 second
+function showAlert(message, duration = 1000) {
+  // creates a new div for each submitted guess / alert
+  const alert = document.createElement("div");
+  // sets the text content of the alert to the passed 'paramater / message'
+  alert.textContent = message;
+  // add's the class of alert to the newly created div
+  alert.classList.add("alert");
+  // adds the newest alert to the top of the list of the parent container so it shows top to bottom
+  alertContainer.prepend(alert);
+  // if the duration we set is over stop running otherwise set the timeout function
+  if (duration == null) return;
+  // removes previous created div's for each alert
+  setTimeout(() => {
+    // after 1 second it add's the hide class to the alert div, which we have set the opacity to 0 effectivly hiding the alert
+    alert.classList.add("hide");
+    // after the transition ends from alert to hide, the callback function removes the alert div
+    alert.addEventListener("transitionend", () => {
+      alert.remove();
+    });
+  }, duration);
+}
+
+// very common css animation style, add the classes, rune it once then remove it immedaitly
+function shakeTiles(tiles) {
+  tiles.forEach((tile) => {
+    tile.classList.add("shake");
+    tile.addEventListener(
+      "animationend",
+      () => {
+        tile.classList.remove("shake");
+      },
+      { once: true }
+    );
+  });
 }

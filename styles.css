@@ -130,6 +130,37 @@ body {
   background-color: hsl(115, 29%, 43%);
 }
 
+/* animation / styling for the shaking motion on the tiles */
+.tile.shake {
+  animation: shake 250ms ease-in-out;
+}
+
+@keyframes shake {
+  10% {
+    transform: translateX(-5%);
+  }
+
+  30% {
+    transform: translateX(5%);
+  }
+
+  50% {
+    transform: translateX(-7.5%);
+  }
+
+  70% {
+    transform: translateX(7.5%);
+  }
+
+  90% {
+    transform: translateX(-5%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
 /* styling for alert box */
 .alert-container {
   position: fixed;

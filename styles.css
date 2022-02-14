@@ -17,6 +17,7 @@ body {
   font-size: clamp(0.5rem, 2.5vmin, 1.5rem);
 }
 
+/* the keyboard size  */
 .keyboard {
   display: grid;
   grid-template-columns: repeat(20, minmax(auto, 1.25em));
@@ -25,6 +26,7 @@ body {
   justify-content: center;
 }
 
+/*  every normal letter key styling */
 .key {
   font-size: inherit;
   grid-column: span 2;
@@ -173,6 +175,7 @@ body {
   align-items: center;
 }
 
+/* how the alert will look and transition */
 .alert {
   pointer-events: none;
   background-color: hsl(204, 7%, 85%);
@@ -183,10 +186,12 @@ body {
   margin-bottom: 0.5em;
 }
 
+/* css targets the last added child div removing the bottom padding */
 .alert:last-child {
   margin-bottom: 0;
 }
 
+/* the class style that will effectively hide or make the alert box transparent */
 .alert.hide {
   opacity: 0;
 }

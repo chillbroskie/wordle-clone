@@ -15292,11 +15292,20 @@ const dictionary = [
   "shave",
 ];
 
+// const for keyboard selector
+const keyboard = document.querySelector("[data-keyboard]");
+
 // const for alert container where itll display the alert
 const alertContainer = document.querySelector("[data-alert-container]");
 
 // const for our game board to select the tile
 const guessGrid = document.querySelector("[data-guess-grid]");
+
+// const default duration of 500ms for tile dance
+const DANCE_ANIMATION_DURATION = 500;
+
+// const defualt duration of 500ms for tile flip
+const FLIP_ANIMATION_DURATION = 500;
 
 // const for the default word length of wordle
 const WORD_LENGTH = 5;
@@ -15320,8 +15329,8 @@ function startInteraction() {
 
 // removes dom listener for keypress / click
 function stopInteraction() {
-  document.removeEventListenerEventListener("click", handleMouseClick);
-  document.removeEventListenerEventListener("keydown", handleKeyPress);
+  document.removeEventListener("click", handleMouseClick);
+  document.removeEventListener("keydown", handleKeyPress);
 }
 
 // handles mouse click of keyboard of a key, enter key and backspace
@@ -15389,6 +15398,54 @@ function submitGuess() {
   const guess = activeTiles.reduce((word, tile) => {
     return word + tile.dataset.letter;
   }, "");
+
+  if (!dictionary.includes(guess)) {
+    showAlert("Not in word list");
+    shakeTiles(activeTiles);
+    return;
+  }
+
+  stopInteraction();
+  activeTiles.forEach((...params) => flipTile(...params, guess));
+}
+
+//function that flips game board tile
+function flipTile(tile, index, array, guess) {
+  const letter = tile.dataset.letter;
+  const key = keyboard.querySelector(`[data-key="${letter}"i]`);
+  setTimeout(() => {
+    tile.classList.add("flip");
+  }, (index * FLIP_ANIMATION_DURATION) / 2);
+
+  // eventlistener waits till end of transition, then removes the class which flips it back around
+  tile.addEventListener(
+    "transitionend",
+    () => {
+      tile.classList.remove("flip");
+      if (targetWord[index] === letter) {
+        tile.dataset.state = "correct";
+        key.classList.add("correct");
+      } else if (targetWord.includes(letter)) {
+        tile.dataset.state = "wrong-location";
+        key.classList.add("wrong-location");
+      } else {
+        tile.dataset.state = "wrong";
+        key.classList.add("wrong");
+      }
+
+      if (index === array.length - 1) {
+        tile.addEventListener(
+          "transitionend",
+          () => {
+            startInteraction();
+            checkWinLose(guess, array);
+          },
+          { once: true }
+        );
+      }
+    },
+    { once: true }
+  );
 }
 
 //function that selects the tiles that have letter inside of them
@@ -15430,5 +15487,37 @@ function shakeTiles(tiles) {
       },
       { once: true }
     );
+  });
+}
+
+// function that checks the guess and if you won or lost
+function checkWinLose(guess, tiles) {
+  if (guess === targetWord) {
+    showAlert("You Win", 5000);
+    danceTiles(tiles);
+    stopInteraction();
+    return;
+  }
+
+  const remainingTiles = guessGrid.querySelectorAll(":not([data-letter])");
+  if (remainingTiles.length === 0) {
+    showAlert(targetWord.toUpperCase(), null);
+    stopInteraction();
+  }
+}
+
+//function that shows the dancing tiles
+function danceTiles(tiles) {
+  tiles.forEach((tile, index) => {
+    setTimeout(() => {
+      tile.classList.add("dance");
+      tile.addEventListener(
+        "animationend",
+        () => {
+          tile.classList.remove("dance");
+        },
+        { once: true }
+      );
+    }, (index * DANCE_ANIMATION_DURATION) / 5);
   });
 }
